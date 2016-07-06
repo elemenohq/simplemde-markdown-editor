@@ -221,9 +221,9 @@ function toggleFullScreen(editor) {
 
 
 	// Hide side by side if needed
-	var sidebyside = cm.getWrapperElement().nextSibling;
-	if(/editor-preview-active-side/.test(sidebyside.className))
-		toggleSideBySide(editor);
+	// var sidebyside = cm.getWrapperElement().nextSibling;
+	// if(/editor-preview-active-side/.test(sidebyside.className))
+	// 	toggleSideBySide(editor);
 }
 
 
@@ -613,11 +613,13 @@ function cleanBlock(editor) {
 /**
  * Action for drawing a link.
  */
-function drawLink(editor) {
+function drawLink(editor, url) {
 	var cm = editor.codemirror;
 	var stat = getState(cm);
 	var options = editor.options;
-	var url = "http://";
+
+	url = url || "http://";
+
 	if(options.promptURLs) {
 		url = prompt(options.promptTexts.link);
 		if(!url) {
@@ -630,11 +632,13 @@ function drawLink(editor) {
 /**
  * Action for drawing an img.
  */
-function drawImage(editor) {
+function drawImage(editor, url) {
 	var cm = editor.codemirror;
 	var stat = getState(cm);
 	var options = editor.options;
-	var url = "http://";
+
+	url = url || "http://";
+
 	if(options.promptURLs) {
 		url = prompt(options.promptTexts.image);
 		if(!url) {
@@ -705,8 +709,8 @@ function toggleSideBySide(editor) {
 		// give some time for the transition from editor.css to fire and the view to slide from right to left,
 		// instead of just appearing.
 		setTimeout(function() {
-			if(!cm.getOption("fullScreen"))
-				toggleFullScreen(editor);
+			// if(!cm.getOption("fullScreen"))
+			// 	toggleFullScreen(editor);
 			preview.className += " editor-preview-active-side";
 		}, 1);
 		toolbarButton.className += " active";
@@ -1242,7 +1246,7 @@ var toolbarBuiltInButtons = {
 
 var insertTexts = {
 	link: ["[", "](#url#)"],
-	image: ["![](", "#url#)"],
+	image: ["![", "](#url#)"],
 	table: ["", "\n\n| Column 1 | Column 2 | Column 3 |\n| -------- | -------- | -------- |\n| Text     | Text     | Text     |\n\n"],
 	horizontalRule: ["", "\n\n-----\n\n"]
 };
@@ -1944,11 +1948,11 @@ SimpleMDE.prototype.toggleOrderedList = function() {
 SimpleMDE.prototype.cleanBlock = function() {
 	cleanBlock(this);
 };
-SimpleMDE.prototype.drawLink = function() {
-	drawLink(this);
+SimpleMDE.prototype.drawLink = function(url) {
+	drawLink(this, url);
 };
-SimpleMDE.prototype.drawImage = function() {
-	drawImage(this);
+SimpleMDE.prototype.drawImage = function(url) {
+	drawImage(this, url);
 };
 SimpleMDE.prototype.drawTable = function() {
 	drawTable(this);
